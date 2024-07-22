@@ -1,6 +1,11 @@
 # Workspace para desarrollo django
 
 # Configuración básica
+El workspace arranca tres contenedores:
+- django: con python y django
+- postgres: con el servidor de base de datos
+- pgadmin: con la consola para administrar la base de datos
+
 Por defecto trae un proyecto django llamado server:
 - Está creada la base de datos en Postgres llamada "bdatos"
 - Para ejecutar el servidor hay que ejecutar run.sh
