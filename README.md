@@ -7,7 +7,7 @@ Se trata de la estructura básica de un workspace para desarrollar en django, se
 - Docker o docker desktop en windows
 
 
-# Configuración básica
+## Configuración básica
 El workspace arranca tres contenedores:
 - django: con python y django
 - postgres: con el servidor de base de datos
