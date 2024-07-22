@@ -14,18 +14,26 @@ services:
     image: postgres:latest
     container_name: postgres
     environment:
-      POSTGRES_DB: server
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bdatos
+      POSTGRES_USER: adminbd
+      POSTGRES_PASSWORD: bdadmin
     ports:
       - "5432:5432"
+    volumes:
+      - ./dockers/init:/docker-entrypoint-initdb.d
 
   pgadmin4:
     image: elestio/pgadmin:latest
     container_name: pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: adan@sevilla.es
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: adminpg@sevilla.es
+      PGADMIN_DEFAULT_PASSWORD: pgadmin
       PGADMIN_LISTEN_PORT: 8080
     ports:
       - "8080:8080"
+    volumes:
+      - ./dockers/servers.json:/pgadmin4/servers.json
+      - ./dockers/pgpassfile:/pgpassfile
+
+#    volumes:
+#      - ./pgadmin4.db:/var/lib/pgadmin/pgadmin4.db
