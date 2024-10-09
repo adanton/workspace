@@ -1,32 +1,26 @@
-# For more information, please refer to https://aka.ms/vscode-docker-python
-FROM python:slim
+# Utiliza una imagen base de Python
+FROM python:3.13.0-alpine3.20
 
+# Establece el directorio de trabajo dentro del contenedor
+WORKDIR /app
+
+# Copia el archivo requirements.txt
+COPY dockers/requirements.txt /app/
+
+# Instala las dependencias
+RUN apk update
+RUN apk upgrade
+RUN apk add git postgresql-dev
+RUN apk cache clean
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip cache purge
+
+# Copia el resto de los archivos del proyecto
+COPY . /app/
+
+# Exponer el puerto donde se ejecutará el servidor de desarrollo de Django
 EXPOSE 8000
 
-# Keeps Python from generating .pyc files in the container
-ENV PYTHONDONTWRITEBYTECODE=1
-
-# Turns off buffering for easier container logging
-ENV PYTHONUNBUFFERED=1
-
-# Install pip requirements
-COPY dockers/requirements.txt .
-RUN python -m pip install -r requirements.txt
-
-# Install git
-RUN apt-get update \
-&& apt-get install -y --no-install-recommends git \
-&& apt-get purge -y --auto-remove \
-&& rm -rf /var/lib/apt/lists/*
-
-WORKDIR /app
-COPY . /app
-
-# Creates a non-root user with an explicit UID and adds permission to access the /app folder
-# For more info, please refer to https://aka.ms/vscode-docker-python-configure-containers
-RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
-USER appuser
-
-# During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-# File wsgi.py was not found in subfolder: 'django'. Please enter the Python path to wsgi file.
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "pythonPath.to.wsgi"]
+# Comando para ejecutar el servidor de desarrollo
+#CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
